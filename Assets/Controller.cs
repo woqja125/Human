@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
+using System.Text;
+using System.Collections.Generic;
 
 public class Controller : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class Controller : MonoBehaviour
 	}
 
 	const int N = 5, M = 6;
-	//const int N = 2, M = 2;
+//	const int N = 2, M = 2;
 	//const int N = 1, M = 1;
 	//const int NUM_GENE = 32;
 
@@ -25,28 +26,33 @@ public class Controller : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1f);
 		makeNewGenes();
-		float period = 4.02f;
+		//float period = 4.65f;
 		int gen = 0;
         for (; true; )
 		{
-			//Debug.Log("Generation : " + gen);
 			makeNewSwings();
 			yield return new WaitForSeconds(1.5f);
-			for (int i = 0; i < N * M; i++) (Swings[i].GetComponent("Swing") as Swing).Human.SendMessage("StartPlayP", period+0.001f*gen);
-//			for (int i = 0; i < N * M; i++) (Swings[i].GetComponent("Swing") as Swing).Human.SendMessage("StartPlay", Genes[i]);
-			yield return new WaitForSeconds(1.0f + (period + 0.001f * gen) * 40);
+			for (int i = 0; i < N * M; i++) (Swings[i].GetComponent("Swing") as Swing).Human.SendMessage("StartPlay", Genes[i]);
+			yield return new WaitForSeconds(2.0f + 4.65f * 8);
 			float[] Heights = new float[N * M];
-			String log = "p:"+(period + 0.001f * gen);
 			for (int i = 0; i < N * M; i++)
 			{
 				Heights[i] = (Swings[i].GetComponent("Swing") as Swing).getMaxHeight();
-                log = log + "\n" + Heights[i];
+				if (Heights[i] > 10) goto loop_end;
 			}
-			Debug.Log(log);
-			Array.Sort(Heights, Genes);
-			RemoveSwings();
+			System.Array.Sort(Heights, Genes);
+			StringBuilder builder = new StringBuilder();
+			builder.AppendFormat("\nGeneration {0}\n\n", gen);
+			for (int i = N*M-1; i >= 0; i--)
+			{
+				builder.AppendFormat("{0}\t{1}\n", System.Convert.ToString(Genes[i], 2).PadLeft(32, '0'), Heights[i]);
+			}
+			Debug.Log(builder.ToString());
 			gen++;
-		//	UpdateGenes();
+			UpdateGenes();
+			loop_end:
+			RemoveSwings();
+			yield return new WaitForSeconds(1f);
 		}
 	}
 
@@ -77,8 +83,7 @@ public class Controller : MonoBehaviour
 	{
 		for (int i = 0; i < N * M; i++)
 		{
-//			Genes[i] = 0xFC000000u;
-			Genes[i] = (((uint)UnityEngine.Random.Range(0, 0x10000)) << 16) + (uint)UnityEngine.Random.Range(0, 0x10000);
+			Genes[i] = (((uint)Random.Range(0, 0x10000)) << 16) + (uint)Random.Range(0, 0x10000);
 		}
 	}
 
@@ -86,26 +91,34 @@ public class Controller : MonoBehaviour
 	{
 		uint[] newGenes = new uint[N * M];
 		for (int i = 0; i < 10; i++) newGenes[i] = Genes[N * M - i - 1];
-		for (int i = 10; i < 25; i++)
+		for (int i = 10; i < 20; i++)
 		{
-			int x = UnityEngine.Random.Range(0, 10);
-			int y = UnityEngine.Random.Range(0, 9);
+			int x = Random.Range(0, 10);
+			int y = Random.Range(0, 9);
 			if (y >= x) y++;
-			int t = UnityEngine.Random.Range(0, 31);
-			for (int j = 0; j <= t; j++) newGenes[i] |= Genes[x] & (1u << j);
-			for (int j = t + 1; j < 32; j++) newGenes[i] |= Genes[y] & (1u << j);
+			int t = Random.Range(0, 31);
+			for (int j = 0; j < 32; j++)
+			{
+				if (j <= t) newGenes[i] |= newGenes[x] & (1u << j);
+				else newGenes[i] |= newGenes[y] & (1u << j);
+			}
 		}
-		for (int i = 25; i < 30; i++)
+		for (int i = 20; i < 30; i++)
 		{
-			newGenes[i] = newGenes[i - 25];
-			int x = UnityEngine.Random.Range(0, 32);
-			newGenes[i] ^= 1u << x;
+			newGenes[i] = newGenes[i - 20];
+			for (int j = 0; j < 32; j++)
+			{
+				if (Random.Range(0, 20) == 0) newGenes[i] ^= 1u << j;
+			}
 		}
-		Genes = newGenes;
+		HashSet<uint> set = new HashSet<uint>(newGenes);
+		while(set.Count < 30)
+		{
+			int x = Random.Range(0, 10);
+			int t = Random.Range(0, 32);
+			set.Add(newGenes[x] ^ (1u << t));
+		}
+		set.CopyTo(Genes);
 	}
-
-	// Update is called once per frame
-	void Update()
-	{
-	}
+	
 }

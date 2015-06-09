@@ -19,9 +19,5 @@ public class HumanBehaviour : MonoBehaviour {
 		Spine = gameObject.transform.FindChild ("Waist").GetComponent<ConfigurableJoint> ();
 
 	}
-
-	// Update is called once per frame
-	void Update () {
-		//
-	}
+	
 }

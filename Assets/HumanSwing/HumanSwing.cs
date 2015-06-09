@@ -9,13 +9,12 @@ public class HumanSwing : HumanBehaviour
 	{
 		base.Start();
 		up();
-   //   down();
 	}
 
 	public void StartPlayP(float p)
 	{
 		period = p;
-		gene = 0xFC000000u;
+		gene = 0xF8000000u;
 		StartCoroutine(playWithGene());
 	}
 
@@ -26,10 +25,10 @@ public class HumanSwing : HumanBehaviour
 	}
 
 	const int NUM_GENE = 32;
-	const int NUM_LOOP_CNT = 40;
+	const int NUM_LOOP_CNT = 8;
 	uint gene = 0;
 
-	float period = 3.711f;
+	float period = 4.65f;
 
 	IEnumerator playWithGene()
 	{
@@ -43,42 +42,34 @@ public class HumanSwing : HumanBehaviour
 			}
 		}
 	}
-
-	void Update()
-	{
-    }
-
+	
 	void up()
 	{
 		Vector3 X = new Vector3(1, 0, 0);
-		Quaternion Zero = Quaternion.AngleAxis(0, new Vector3(1, 0, 0));
 		RightLap.targetRotation = Quaternion.AngleAxis(-10, X);
 		LeftLap.targetRotation = Quaternion.AngleAxis(-10, X);
-		//RightLap.targetRotation = Zero;
-		//LeftLap.targetRotation = Zero;
-		RightL.targetRotation = Zero;
-		LeftL.targetRotation = Zero;
+		RightL.targetRotation = Quaternion.AngleAxis(-10, X);
+		LeftL.targetRotation = Quaternion.AngleAxis(-10, X);
 
-		RightElbow.targetRotation = Zero;
-		LeftElbow.targetRotation = Zero;
-
-		RightS.targetRotation = Zero;
-		LeftS.targetRotation = Zero;
+		RightElbow.targetRotation = Quaternion.AngleAxis(-10, X);
+		LeftElbow.targetRotation = Quaternion.AngleAxis(-10, X);
+		RightS.targetRotation = Quaternion.AngleAxis(-10, X);
+		LeftS.targetRotation = Quaternion.AngleAxis(-10, X);
 	}
 
 	void down()
 	{
         Vector3 X = new Vector3(1, 0, 0);
-        RightLap.targetRotation = Quaternion.AngleAxis(150, X);
-		LeftLap.targetRotation = Quaternion.AngleAxis(150, X);
-		RightL.targetRotation = Quaternion.AngleAxis(165, X);
-		LeftL.targetRotation = Quaternion.AngleAxis(165, X);
+        RightLap.targetRotation = Quaternion.AngleAxis(180, X);
+		LeftLap.targetRotation = Quaternion.AngleAxis(180, X);
+		RightL.targetRotation = Quaternion.AngleAxis(180, X);
+		LeftL.targetRotation = Quaternion.AngleAxis(180, X);
 
-		RightElbow.targetRotation = Quaternion.AngleAxis(150, X);
-		LeftElbow.targetRotation = Quaternion.AngleAxis(150, X);
+		RightElbow.targetRotation = Quaternion.AngleAxis(170, X);
+		LeftElbow.targetRotation = Quaternion.AngleAxis(170, X);
 
-		RightS.targetRotation = Quaternion.AngleAxis(150, X);
-		LeftS.targetRotation = Quaternion.AngleAxis(150, X);
+		RightS.targetRotation = Quaternion.AngleAxis(170, X);
+		LeftS.targetRotation = Quaternion.AngleAxis(170, X);
         //
 	}
 
