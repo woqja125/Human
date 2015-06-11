@@ -25,7 +25,7 @@ public class HumanSwing : HumanBehaviour
 	}
 
 	const int NUM_GENE = 32;
-	const int NUM_LOOP_CNT = 8;
+	const int NUM_LOOP_CNT = 10;
 	uint gene = 0;
 
 	float period = 4.65f;

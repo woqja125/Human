@@ -1,13 +1,44 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Text;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviour
 {
 
 	public GameObject SwingPrefab;
-	
+	public Text FrameRate, Status;
+
+	void Awake()
+	{
+		Application.targetFrameRate = 60;
+	}
+
+	private float accum = 0; // FPS accumulated over the interval
+	private int frames = 0; // Frames drawn over the interval
+	private float timeleft = 0.5f; // Left time for current interval
+
+	void Update()
+	{
+		timeleft -= Time.deltaTime;
+		accum += Time.timeScale / Time.deltaTime;
+		++frames;
+
+		// Interval ended - update GUI text and start new interval
+		if (timeleft <= 0.0)
+		{
+			// display two fractional digits (f2 format)
+			float fps = accum / frames;
+			string format = string.Format("{0:F2}", fps);
+			FrameRate.text = format;
+
+			timeleft = 0.5f;
+			accum = 0.0F;
+			frames = 0;
+		}
+	}
+
 	// Use this for initialization
 	void Start()
 	{
@@ -15,39 +46,43 @@ public class Controller : MonoBehaviour
 	}
 
 	const int N = 5, M = 6;
-//	const int N = 2, M = 2;
-	//const int N = 1, M = 1;
-	//const int NUM_GENE = 32;
 
 	GameObject[] Swings = new GameObject[N * M];
 	uint[] Genes = new uint[N * M];
 
 	IEnumerator controll()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(5f);
 		makeNewGenes();
-		//float period = 4.65f;
+		var file = File.CreateText("result.txt");
 		int gen = 0;
+		uint mgene=0;
+		float max = 0;
         for (; true; )
 		{
+			Status.text = "Gen  " + gen + "\nMax  "+max+"\n"+ System.Convert.ToString(mgene, 2).PadLeft(32, '0');
 			makeNewSwings();
 			yield return new WaitForSeconds(1.5f);
 			for (int i = 0; i < N * M; i++) (Swings[i].GetComponent("Swing") as Swing).Human.SendMessage("StartPlay", Genes[i]);
-			yield return new WaitForSeconds(2.0f + 4.65f * 8);
+			yield return new WaitForSeconds(2.0f + 4.65f * 10);
 			float[] Heights = new float[N * M];
 			for (int i = 0; i < N * M; i++)
 			{
 				Heights[i] = (Swings[i].GetComponent("Swing") as Swing).getMaxHeight();
-				if (Heights[i] > 10) goto loop_end;
+				if (Heights[i] > 20) goto loop_end;
 			}
 			System.Array.Sort(Heights, Genes);
-			StringBuilder builder = new StringBuilder();
-			builder.AppendFormat("\nGeneration {0}\n\n", gen);
+			max = Heights[N * M - 1];
+			mgene = Genes[N * M - 1];
+
+			file.WriteLine("Generation {0}", gen);
+			file.WriteLine("");
 			for (int i = N*M-1; i >= 0; i--)
 			{
-				builder.AppendFormat("{0}\t{1}\n", System.Convert.ToString(Genes[i], 2).PadLeft(32, '0'), Heights[i]);
+				file.WriteLine("{0}\t{1}", System.Convert.ToString(Genes[i], 2).PadLeft(32, '0'), Heights[i]);
 			}
-			Debug.Log(builder.ToString());
+			file.WriteLine();
+			file.Flush();
 			gen++;
 			UpdateGenes();
 			loop_end:
@@ -90,12 +125,11 @@ public class Controller : MonoBehaviour
 	void UpdateGenes()
 	{
 		uint[] newGenes = new uint[N * M];
-		for (int i = 0; i < 10; i++) newGenes[i] = Genes[N * M - i - 1];
-		for (int i = 10; i < 20; i++)
+		for (int i = 0; i < 4; i++) newGenes[i] = Genes[N * M - i - 1];
+		for (int i = 4; i < 15; i++)
 		{
-			int x = Random.Range(0, 10);
-			int y = Random.Range(0, 9);
-			if (y >= x) y++;
+			int x = Random.Range(0, 4);
+			int y = Random.Range(0, 4);
 			int t = Random.Range(0, 31);
 			for (int j = 0; j < 32; j++)
 			{
@@ -103,12 +137,12 @@ public class Controller : MonoBehaviour
 				else newGenes[i] |= newGenes[y] & (1u << j);
 			}
 		}
-		for (int i = 20; i < 30; i++)
+		for (int i = 15; i < 30; i++)
 		{
-			newGenes[i] = newGenes[i - 20];
+			newGenes[i] = newGenes[Random.Range(0, 4)];
 			for (int j = 0; j < 32; j++)
 			{
-				if (Random.Range(0, 20) == 0) newGenes[i] ^= 1u << j;
+				if (Random.Range(0, 15) == 0) newGenes[i] ^= 1u << j;
 			}
 		}
 		HashSet<uint> set = new HashSet<uint>(newGenes);

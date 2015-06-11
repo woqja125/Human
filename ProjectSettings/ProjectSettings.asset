@@ -3,17 +3,14 @@
 --- !u!129 &1
 PlayerSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   AndroidProfiler: 0
   defaultScreenOrientation: 4
   targetDevice: 2
-  targetGlesGraphics: -1
-  targetIOSGraphics: -1
   targetResolution: 0
   accelerometerFrequency: 60
   companyName: jb
-  productName: Human
-  cloudProjectId: 
+  productName: "\uBC15\uADF8\uB124"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_ShowUnitySplashScreen: 0
@@ -26,7 +23,6 @@ PlayerSettings:
   m_ActiveColorSpace: 0
   m_MTRendering: 1
   m_MobileMTRendering: 0
-  m_UseDX11: 1
   m_Stereoscopic3D: 0
   iosShowActivityIndicatorOnLoading: -1
   androidShowActivityIndicatorOnLoading: -1
@@ -42,13 +38,13 @@ PlayerSettings:
   defaultIsFullScreen: 0
   defaultIsNativeResolution: 1
   runInBackground: 1
-  captureSingleScreen: 1
+  captureSingleScreen: 0
   Override IPod Music: 0
   Prepare IOS For Recording: 0
   submitAnalytics: 1
   usePlayerLog: 1
   bakeCollisionMeshes: 0
-  forceSingleInstance: 0
+  forceSingleInstance: 1
   resizableWindow: 0
   useMacAppStoreValidation: 0
   gpuSkinning: 0
@@ -57,7 +53,7 @@ PlayerSettings:
   xboxEnableKinect: 0
   xboxEnableKinectAutoTracking: 0
   xboxEnableFitness: 0
-  visibleInBackground: 1
+  visibleInBackground: 0
   macFullscreenMode: 2
   d3d9FullscreenMode: 1
   d3d11FullscreenMode: 1
@@ -123,6 +119,7 @@ PlayerSettings:
   iOSLaunchScreenCustomXibPath: 
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
+  androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: 
   AndroidKeyaliasName: 
   AndroidTVCompatibility: 1
@@ -133,13 +130,21 @@ PlayerSettings:
     height: 180
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
-  resolutionDialogBanner: {fileID: 0}
+  resolutionDialogBanner: {fileID: 2800000, guid: cb0b7a5b8a668934b8d0e25023852201,
+    type: 3}
   m_BuildTargetIcons:
   - m_BuildTarget: 
     m_Icons:
-    - m_Icon: {fileID: 0}
+    - m_Icon: {fileID: 2800000, guid: a2b17d7b1f69c3642aee3f9e8a246c55, type: 3}
       m_Size: 128
-  m_BuildTargetBatching: []
+  m_BuildTargetBatching:
+  - m_BuildTarget: Standalone
+    m_StaticBatching: 1
+    m_DynamicBatching: 1
+  m_BuildTargetGraphicsAPIs:
+  - m_BuildTarget: WindowsStandaloneSupport
+    m_APIs: 01000000
+    m_Automatic: 0
   webPlayerTemplate: APPLICATION:Default
   m_TemplateCustomTags: {}
   actionOnDotNetUnhandledException: 1
@@ -201,6 +206,7 @@ PlayerSettings:
   ps4ApplicationParam2: 0
   ps4ApplicationParam3: 0
   ps4ApplicationParam4: 0
+  ps4GarlicHeapSize: 2048
   ps4Passcode: frAQBc8Wsa1xVPfvJcrgRYwTiizs2trQ
   ps4pnSessions: 1
   ps4pnPresence: 1
@@ -255,6 +261,7 @@ PlayerSettings:
   psp2InfoBarOnStartup: 0
   psp2InfoBarColor: 0
   psmSplashimage: {fileID: 0}
+  virtualRealitySupported: 0
   spritePackerPolicy: 
   scriptingDefineSymbols: {}
   metroPackageName: Human
@@ -358,8 +365,7 @@ PlayerSettings:
   blackberrySquareSplashScreen: {fileID: 0}
   tizenProductDescription: 
   tizenProductURL: 
-  tizenCertificatePath: 
-  tizenCertificatePassword: 
+  tizenSigningProfileName: 
   tizenGPSPermissions: 0
   tizenMicrophonePermissions: 0
   stvDeviceAddress: 
@@ -404,8 +410,10 @@ PlayerSettings:
   iOS::Architecture: 0
   iOS::ScriptingBackend: 0
   boolPropertyNames:
+  - WebGL::analyzeBuildSize
   - WebGL::dataCaching
   - XboxOne::enus
+  WebGL::analyzeBuildSize: 0
   WebGL::dataCaching: 0
   XboxOne::enus: 1
   stringPropertyNames:
@@ -413,4 +421,9 @@ PlayerSettings:
   - WebGL::template
   WebGL::emscriptenArgs: 
   WebGL::template: APPLICATION:Default
-  firstStreamedLevelWithResources: 0
+  firstStreamedSceneWithResources: 0
+  cloudProjectId: 
+  projectId: 
+  projectName: 
+  organizationId: 
+  cloudEnabled: 0
